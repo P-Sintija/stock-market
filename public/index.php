@@ -1,27 +1,58 @@
 <?php
 
+use App\Controllers\PurchaseController;
 use App\Controllers\HomeController;
+use App\Controllers\SellController;
+use App\Repositories\APIFinnhubRepository;
+use App\Repositories\JSONWalletRepository;
 use App\Repositories\MySQLStockRepository;
 use App\Repositories\StockRepository;
-use App\Services\BoughtStockService;
+use App\Repositories\WalletRepository;
+use App\Services\ClientStockService;
+use App\Services\PurchaseStockService;
+use App\Services\SellStockService;
+use App\Services\WalletService;
 use League\Container\Container;
 
 require_once '../vendor/autoload.php';
 
+session_start();
+
+
 $container = new Container();
 $container->add(StockRepository::class, MySQLStockRepository::class);
+$container->add(APIFinnhubRepository::class, APIFinnhubRepository::class);
+$container->add(WalletRepository::class, JSONWalletRepository::class);
 
-$container->add(BoughtStockService::class,BoughtStockService::class)
+$container->add(ClientStockService::class,ClientStockService::class)
     ->addArgument(StockRepository::class);
 
 $container->add(HomeController::class,HomeController::class)
-    ->addArgument(BoughtStockService::class);
+    ->addArguments([ClientStockService::class,APIFinnhubRepository::class, WalletService::class]);
 
+$container->add(PurchaseStockService::class,PurchaseStockService::class)
+    ->addArgument(StockRepository::class);
+
+$container->add(PurchaseController::class,PurchaseController::class)
+->addArguments([PurchaseStockService::class,  WalletService::class]);
+
+$container->add(SellStockService::class,SellStockService::class)
+    ->addArgument(StockRepository::class);
+
+$container->add(SellController::class,SellController::class)
+    ->addArguments([SellStockService::class,  WalletService::class]);
+
+$container->add(WalletService::class, WalletService::class)
+    ->addArgument(WalletRepository::class);
 
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/', [HomeController::class, 'showPage']);
-
+    $r->addRoute('POST', '/', [HomeController::class, 'getStockPrice']);
+    $r->addRoute('GET', '/buy', [PurchaseController::class, 'showPage']);
+    $r->addRoute('POST', '/buy', [PurchaseController::class, 'purchase']);
+    $r->addRoute('POST', '/sell', [SellController::class, 'sell']);
+    $r->addRoute('GET', '/sell', [SellController::class, 'back']);
 
 });
 

@@ -3,7 +3,7 @@ namespace App\Models;
 
 class StockCollection
 {
-    private array $stockList;
+    private array $stockList = [];
 
     public function addStock(Stock $stock): void
     {

@@ -1,9 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Models\StockCollection;
 use App\Repositories\StockRepository;
 
-class BoughtStockService
+class ClientStockService
 {
     private StockRepository $stockRepository;
 
@@ -12,8 +13,8 @@ class BoughtStockService
         $this->stockRepository = $stockRepository;
     }
 
-    public function getStockRepository(): StockRepository
+    public function getStocks(): StockCollection
     {
-        return $this->stockRepository;
+        return $this->stockRepository->getStockData();
     }
 }
