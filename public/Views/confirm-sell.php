@@ -12,7 +12,7 @@
 
 <p class="text-2xl text-pink-700 --tw-text-opacity: 1; m-4 ">
     <?php echo 'You sold ' . $stock->getSymbol() . ' for ' .
-        number_format($benefit / 100, 2) . ' USD'; ?></p>
+        number_format($soldPrice / 100, 2) . ' USD'; ?></p>
 
 <form method="get" action="/">
     <button class="bg-indigo-400 hover:bg-indigo-500 text-white py-2 px-4 rounded border border-indigo-900 m-4 "

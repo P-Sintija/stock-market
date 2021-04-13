@@ -24,61 +24,52 @@ class MySQLStockRepository implements StockRepository
     public function getStockData(): StockCollection
     {
         $stockList = new StockCollection();
-
-        $data = $this->database->select('stock1234', '*');
-
-        if($data) {
+        $data = $this->database->select('stocks', '*');
+        if ($data) {
             foreach ($data as $stock) {
                 $stockList->addStock(new Stock(
                     $stock['symbol'],
-                    $stock['price'] ,
+                    $stock['price'],
                     $stock['amount'],
-                    $stock['status'],
-                    $stock['id'],
-                    $stock['benefit']
+                    $stock['id']
                 ));
             }
         }
-
         return $stockList;
     }
 
     public function insertPurchase(Stock $stock): void
     {
 
-        $this->database->insert('stock1234', [
+        $this->database->insert('stocks', [
             'symbol' => $stock->getSymbol(),
             'price' => $stock->getPrice(),
             'amount' => $stock->getAmount(),
-            'status' => 'active'
         ]);
     }
 
     public function searchStock(int $id): Stock
     {
-        $data = $this->database->select('stock1234','*',['id'=> $id]);
+        $data = $this->database->select('stocks', '*', ['id' => $id]);
         return new Stock(
             $data[0]['symbol'],
             $data[0]['price'],
             $data[0]['amount'],
-            $data[0]['status'],
-            $data[0]['id'],
-            $data[0]['benefit']
+            $data[0]['id']
         );
     }
 
-    public function edit(Stock $stock, int $currentPrice): void
+    public function edit(Stock $stock, string $key, int $value): void
     {
         $where = ['id' => $stock->getId()];
-
-        $this->database->update('stock1234', [
-            'symbol' => $stock->getSymbol(),
-            'price' => $stock->getPrice(),
-            'amount' => $stock->getAmount(),
-            'status' => 'sold',
-            'id' => $stock->getId(),
-            'benefit' => ($currentPrice - $stock->getPrice()) * $stock->getAmount()
-
+        $this->database->update('stocks', [
+            $key => $value
         ], $where);
+    }
+
+    public function delete(Stock $stock): void
+    {
+        $where = ['id' => $stock->getId()];
+        $this->database->delete('stocks', $where);
     }
 }

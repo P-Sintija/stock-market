@@ -5,7 +5,9 @@ use App\Controllers\HomeController;
 use App\Controllers\SellController;
 use App\Repositories\APIFinnhubRepository;
 use App\Repositories\JSONWalletRepository;
+use App\Repositories\MySQLSoldRepository;
 use App\Repositories\MySQLStockRepository;
+use App\Repositories\SoldRepository;
 use App\Repositories\StockRepository;
 use App\Repositories\WalletRepository;
 use App\Services\ClientStockService;
@@ -23,9 +25,10 @@ $container = new Container();
 $container->add(StockRepository::class, MySQLStockRepository::class);
 $container->add(APIFinnhubRepository::class, APIFinnhubRepository::class);
 $container->add(WalletRepository::class, JSONWalletRepository::class);
+$container->add(SoldRepository::class, MySQLSoldRepository::class);
 
 $container->add(ClientStockService::class,ClientStockService::class)
-    ->addArgument(StockRepository::class);
+    ->addArguments([StockRepository::class, SoldRepository::class]);
 
 $container->add(HomeController::class,HomeController::class)
     ->addArguments([ClientStockService::class,APIFinnhubRepository::class, WalletService::class]);
@@ -37,7 +40,7 @@ $container->add(PurchaseController::class,PurchaseController::class)
 ->addArguments([PurchaseStockService::class,  WalletService::class]);
 
 $container->add(SellStockService::class,SellStockService::class)
-    ->addArgument(StockRepository::class);
+    ->addArguments([StockRepository::class, SoldRepository::class]);
 
 $container->add(SellController::class,SellController::class)
     ->addArguments([SellStockService::class,  WalletService::class]);

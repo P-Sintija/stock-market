@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Models\Stock;
@@ -12,5 +13,7 @@ interface StockRepository
 
     public function searchStock(int $id): Stock;
 
-    public function edit(Stock $stock, int $currentPrice): void;
+    public function edit(Stock $stock, string $key, int $value): void;
+
+    public function delete(Stock $stock): void;
 }

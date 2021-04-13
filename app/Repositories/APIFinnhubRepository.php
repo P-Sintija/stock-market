@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Repositories;
 
 use Finnhub;
 use GuzzleHttp;
-
 
 class APIFinnhubRepository
 {
@@ -18,11 +18,7 @@ class APIFinnhubRepository
         );
 
         return $client->quote($symbol);
-
     }
-
-
-
 
 }
 

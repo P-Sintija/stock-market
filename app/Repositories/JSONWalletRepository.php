@@ -38,5 +38,4 @@ class JSONWalletRepository implements WalletRepository
         file_put_contents(__DIR__ . '/../../Data/wallet.json', $modifiedJSON);
     }
 
-
 }

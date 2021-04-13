@@ -25,12 +25,12 @@ class PurchaseController
                 $_SESSION['stock']['symbol'],
                 $_SESSION['stock']['price'],
                 $_SESSION['stock']['amount'],
-                $_SESSION['stock']['status'],
             ));
             $_SESSION['wallet']['expenses'] = (int)$_SESSION['stock']['price'] * (int)$_SESSION['stock']['amount'];
             $this->wallet->removeFromWallet($_SESSION['wallet']['expenses']);
             require_once __DIR__ . '/../../public/Views/confirm-purchase.php';
         } else {
+            $message = 'Sorry, yo do not have enough money :(';
             require_once __DIR__ . '/../../public/Views/error.php';
         }
     }

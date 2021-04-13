@@ -9,7 +9,7 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-<p class=" m-4">Sorry, yo do not have enough money :( </p>
+<p class=" m-4"> <?php echo $message ?></p>
 
 <form method="get" action="/">
     <button class="bg-indigo-400 hover:bg-indigo-500 text-white py-2 px-4 rounded border border-indigo-900 m-4 "

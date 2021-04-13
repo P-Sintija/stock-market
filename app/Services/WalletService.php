@@ -15,6 +15,9 @@ class WalletService
 
     public function getWalletAmount(): int
     {
+        if ($this->wallet->getWallet()->getBudget() < 0) {
+            throw new \UnexpectedValueException('Invalid budget amount!');
+        }
         return $this->wallet->getWallet()->getBudget();
     }
 
