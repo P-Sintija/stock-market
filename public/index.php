@@ -13,25 +13,30 @@ use App\Repositories\WalletRepository;
 use App\Services\ClientStockService;
 use App\Services\PurchaseStockService;
 use App\Services\SellStockService;
+use App\Services\StockMarketService;
 use App\Services\WalletService;
+use Doctrine\Common\Cache\FilesystemCache;
 use League\Container\Container;
 
 require_once '../vendor/autoload.php';
 
 session_start();
 
-
 $container = new Container();
 $container->add(StockRepository::class, MySQLStockRepository::class);
-$container->add(APIFinnhubRepository::class, APIFinnhubRepository::class);
+$container->add(APIFinnhubRepository::class, APIFinnhubRepository::class)
+->addArgument(new FilesystemCache('../Storage/cache'));
 $container->add(WalletRepository::class, JSONWalletRepository::class);
 $container->add(SoldRepository::class, MySQLSoldRepository::class);
 
 $container->add(ClientStockService::class,ClientStockService::class)
     ->addArguments([StockRepository::class, SoldRepository::class]);
 
+$container->add(StockMarketService::class, StockMarketService::class)
+    ->addArgument(APIFinnhubRepository::class);
+
 $container->add(HomeController::class,HomeController::class)
-    ->addArguments([ClientStockService::class,APIFinnhubRepository::class, WalletService::class]);
+    ->addArguments([ClientStockService::class,StockMarketService::class, WalletService::class]);
 
 $container->add(PurchaseStockService::class,PurchaseStockService::class)
     ->addArgument(StockRepository::class);

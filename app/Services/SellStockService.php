@@ -34,4 +34,11 @@ class SellStockService
         $this->soldRepository->insertSell($stock);
     }
 
+    public function deleteStock(Stock $stock): void
+    {
+        if ($stock->getAmount() <= 0) {
+            $this->stockRepository->delete($stock);
+        }
+    }
+
 }

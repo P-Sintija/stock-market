@@ -29,8 +29,4 @@ class ClientStockService
         return $this->soldRepository->getStockData();
     }
 
-    public function deleteStock(Stock $stock): void
-    {
-        $this->stockRepository->delete($stock);
-    }
 }

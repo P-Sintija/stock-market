@@ -8,11 +8,13 @@ class Stock
     private int $price;
     private int $amount;
     private ?int $id;
+    private string $date;
 
     public function __construct(
         string $symbol,
         int $price,
         int $amount,
+        string $date,
         int $id = null
     )
     {
@@ -20,6 +22,7 @@ class Stock
         $this->price = $price;
         $this->amount = $amount;
         $this->id = $id;
+        $this->date = $date;
     }
 
     public function getSymbol(): string
@@ -40,6 +43,11 @@ class Stock
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
     }
 
 }

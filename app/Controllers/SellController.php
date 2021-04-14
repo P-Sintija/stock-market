@@ -34,7 +34,7 @@ class SellController
                 $currentPrice,
                 ($currentPrice - $stock->getPrice()) * $_POST['amountSold']
             ));
-
+            $this->service->deleteStock($this->service->search($stock->getId()));
             $this->wallet->addToWallet($soldPrice);
             require_once __DIR__ . '/../../public/Views/confirm-sell.php';
         } else {

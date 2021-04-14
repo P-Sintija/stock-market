@@ -2,20 +2,20 @@
 
 namespace App\Controllers;
 
-use App\Repositories\APIFinnhubRepository;
 use App\Services\ClientStockService;
+use App\Services\StockMarketService;
 use App\Services\WalletService;
 
 
 class HomeController
 {
     private ClientStockService $service;
-    private APIFinnhubRepository $stockMarket;
+    private StockMarketService $stockMarket;
     private WalletService $wallet;
 
     public function __construct(
         ClientStockService $service,
-        APIFinnhubRepository $stockMarket,
+        StockMarketService $stockMarket,
         WalletService $wallet)
     {
         $this->service = $service;
@@ -46,10 +46,10 @@ class HomeController
     public function getStockPrice(): void
     {
         $stockList = $this->getStockList();
-
+        $soldStockList = $this->service->getSoldStocks()->getSoldList();
         $quote = $this->stockMarket->getQuote($_POST['symbol']);
 
-        if ($quote['c'] == 0) {
+        if ($quote == 0) {
             $message = 'Invalid stock Symbol';
             require_once __DIR__ . '/../../public/Views/error.php';
         } else if (!is_numeric($_POST['amount']) || (int)$_POST['amount'] <= 0) {
@@ -57,7 +57,7 @@ class HomeController
             require_once __DIR__ . '/../../public/Views/error.php';
         } else {
             $_SESSION['stock']['symbol'] = $_POST['symbol'];
-            $_SESSION['stock']['price'] = $quote['c'] * 100;
+            $_SESSION['stock']['price'] = (int)((float)$quote * 100);
             $_SESSION['stock']['amount'] = (int)$_POST['amount'];
             require_once __DIR__ . '/../../public/Views/home.php';
         }
@@ -68,17 +68,13 @@ class HomeController
         $stockList = [];
         if (count($this->service->getStocks()->getStockList()) > 0) {
             foreach ($this->service->getStocks()->getStockList() as $stock) {
-                if ($stock->getAmount() <= 0) {
-                    $this->service->deleteStock($stock);
-                }
                 $stockList[$stock->getId()] = [
                     'stock' => $stock,
-                    'currentPrice' => (int)($this->stockMarket->getQuote($stock->getSymbol())['c'] * 100)
+                    'currentPrice' => (int)((float)$this->stockMarket->getQuote($stock->getSymbol()) * 100)
                 ];
-                $_SESSION['currentPrices'][$stock->getId()] = (int)($this->stockMarket->getQuote($stock->getSymbol())['c'] * 100);
+                $_SESSION['currentPrices'][$stock->getId()] = (int)((float)$this->stockMarket->getQuote($stock->getSymbol()) * 100);
             }
         }
-
         return $stockList;
     }
 

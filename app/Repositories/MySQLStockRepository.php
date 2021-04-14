@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 
@@ -31,6 +32,7 @@ class MySQLStockRepository implements StockRepository
                     $stock['symbol'],
                     $stock['price'],
                     $stock['amount'],
+                    $stock['date'],
                     $stock['id']
                 ));
             }
@@ -45,6 +47,7 @@ class MySQLStockRepository implements StockRepository
             'symbol' => $stock->getSymbol(),
             'price' => $stock->getPrice(),
             'amount' => $stock->getAmount(),
+            'date' => $stock->getDate()
         ]);
     }
 
@@ -55,6 +58,7 @@ class MySQLStockRepository implements StockRepository
             $data[0]['symbol'],
             $data[0]['price'],
             $data[0]['amount'],
+            $data[0]['date'],
             $data[0]['id']
         );
     }

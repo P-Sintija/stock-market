@@ -73,6 +73,9 @@
                         Purchased <br> one / all (USD)
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Current price <br> one / all (USD)
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -90,6 +93,9 @@
                         <td class=" px-6 py-4 whitespace-nowrap text-sm">
                             <?php echo number_format($value['stock']->getPrice() / 100, 2) . ' / '
                                 . number_format(($value['stock']->getAmount() * $value['stock']->getPrice()) / 100, 2) ?></td>
+
+                        <td> <?php echo $value['stock']->getDate() ?> </td>
+
                         <td class=" px-6 py-4 whitespace-nowrap text-sm">
                             <?php echo number_format($value['currentPrice'] / 100, 2) . ' / ' .
                                 number_format(($value['currentPrice'] * $value['stock']->getAmount()) / 100, 2); ?></td>

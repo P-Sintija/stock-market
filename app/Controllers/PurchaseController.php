@@ -25,6 +25,7 @@ class PurchaseController
                 $_SESSION['stock']['symbol'],
                 $_SESSION['stock']['price'],
                 $_SESSION['stock']['amount'],
+                date('Y-m-d') . ' ' . (date('H') + 3) . date(':i:s')
             ));
             $_SESSION['wallet']['expenses'] = (int)$_SESSION['stock']['price'] * (int)$_SESSION['stock']['amount'];
             $this->wallet->removeFromWallet($_SESSION['wallet']['expenses']);
